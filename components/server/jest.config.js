@@ -1,9 +1,9 @@
 module.exports = {
-  clearMocks: true,
-  coverageProvider: "v8",
-  preset: "ts-jest/presets/js-with-ts",
-  setupFiles: ["dotenv/config"],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  testMatch: ['**/*.test.ts'],
   transform: {
-    "^.+\\.(ts|js)$": "ts-jest",
+    '^.+\\.ts?$': 'ts-jest',
   },
+  transformIgnorePatterns: ['<rootDir>/node_modules/'],
 };
