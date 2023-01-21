@@ -16,6 +16,8 @@ const mockOutput: Omit<Message, "id" | "createdAt">[] = [
 jest.setTimeout(60000);
 
 beforeAll(async () => {
+  await prisma.$connect();
+
   await prisma.message.createMany({
     data: mockOutput,
   });
