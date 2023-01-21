@@ -5,8 +5,6 @@ import { IconTrash } from "@tabler/icons";
 import { Flex, createStyles, Text, ActionIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { useCallback } from "react";
-import { useMutation } from "@tanstack/react-query";
-import ky from "ky";
 import { trpc } from "../trpc";
 
 const useStyles = createStyles((theme) => ({
@@ -56,25 +54,12 @@ type Props = {
   item: Omit<MessageType, "createdAt"> & { createdAt: string; image?: string };
   page: number;
 };
-interface DeleteOpts {
-  id: string;
-}
 
 const Message = ({ item, page }: Props) => {
   const { classes, cx } = useStyles();
   const { hovered, ref } = useHover();
   const ctx = trpc.useContext();
   const deleteMessage = trpc.delete.useMutation();
-
-  const deleteFile = useMutation({
-    mutationFn: (opts: DeleteOpts) => {
-      return ky.post("/api/delete", {
-        json: {
-          id: opts.id,
-        },
-      });
-    },
-  });
 
   const url = item.id === "temp" && item.image ? item.image : item.url;
 
@@ -94,22 +79,14 @@ const Message = ({ item, page }: Props) => {
       }
     );
 
-    const res = await deleteMessage.mutateAsync({
+    await deleteMessage.mutateAsync({
       id: item.id,
     });
-
-    const id = res?.id;
-
-    if (item.hasImage && id) {
-      await deleteFile.mutateAsync({
-        id,
-      });
-    }
 
     await ctx.invalidate(undefined, {
       queryKey: ["list"],
     });
-  }, [deleteMessage, ctx, page, item, deleteFile]);
+  }, [deleteMessage, ctx, page, item]);
 
   return (
     <div ref={ref} className={classes.box}>

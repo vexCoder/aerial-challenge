@@ -1,6 +1,6 @@
 import { AddMessage, DeleteMessage, ListMessages } from "core";
 import pMap from "p-map";
-import { getSignedUrlForSrc } from "../s3";
+import { deleteImage, getSignedUrlForSrc } from "../s3";
 import { AddMessageDTO, DeleteMessageDTO, GetMessagesDTO } from "../dto";
 import PrismaMessageRepository from "../repository/message";
 import type { Context } from "../trpc";
@@ -54,5 +54,6 @@ export const deleteMessage = async ({
   input,
 }: WithContext<DeleteMessageDTO>) => {
   const { deleteMessageInteractor } = buildInteractors(ctx);
+  await deleteImage(input.id);
   return deleteMessageInteractor.run(input.id);
 };

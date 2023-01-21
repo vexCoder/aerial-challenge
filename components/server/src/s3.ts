@@ -1,5 +1,9 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 const client = new S3Client({
   region: process.env.AWS_REGION,
@@ -20,4 +24,13 @@ export const getSignedUrlForSrc = async (key: string) => {
   return getSignedUrl(client, command, {
     expiresIn: 60 * 60 * 24 * 7,
   });
+};
+
+export const deleteImage = async (key: string) => {
+  await client.send(
+    new DeleteObjectCommand({
+      Bucket: "aerial-challenge",
+      Key: key,
+    })
+  );
 };

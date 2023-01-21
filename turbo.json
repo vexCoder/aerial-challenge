@@ -1,10 +1,16 @@
 {
   "pipeline": {
-    "build": {
+    "server#build": {
       "dependsOn": [
-        "generate"
+        "core#build", "server#generate"
       ]
     },
+    "view#build": {
+      "dependsOn": [
+        "server#build"
+      ]
+    },
+    "build": {},
     "generate": {},
     "dev": {},
     "lint": {},
