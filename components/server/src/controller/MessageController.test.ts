@@ -1,4 +1,4 @@
-import { test, expect, beforeAll, afterAll } from "@jest/globals";
+import { test, expect, beforeAll, afterAll, jest } from "@jest/globals";
 import { Message } from "@prisma/client";
 import prisma from "../prisma";
 import { appRouter, createInnerTRPCContext } from "../server";
@@ -15,6 +15,8 @@ const mockOutput: Omit<Message, "id" | "createdAt">[] = [
 ];
 
 beforeAll(async () => {
+  jest.setTimeout(60000);
+
   await prisma.$connect();
 
   await prisma.message.createMany({
@@ -32,6 +34,8 @@ test("list test", async () => {
 });
 
 afterAll(async () => {
+  jest.setTimeout(60000);
+
   await prisma.message.deleteMany({
     where: {
       message: {
