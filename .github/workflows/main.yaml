@@ -8,6 +8,10 @@ jobs:
   test:
     environment: production
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
     steps:
       - name: Install git
         run: |
@@ -20,6 +24,10 @@ jobs:
         run: yarn --frozen-lockfile
       - name: Build
         run: yarn workspace core build && yarn workspace server generate && yarn workspace server build
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
       - name: Run tests
         run: yarn workspace server test
         env:
