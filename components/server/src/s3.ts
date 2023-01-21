@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 
 const client = new S3Client({
-  region: process.env.AWS_REGION,
+  region: process.env.AWS_REGION_NAME,
   apiVersion: process.env.AWS_API_VERSION,
   credentials: {
     accessKeyId: process.env.AWS_S3_ACCESS,
