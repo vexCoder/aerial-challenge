@@ -5,5 +5,5 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - run: yarn test
+      - run: yarn workspace server test
       - run: echo "🍏 This job's status is ${{ job.status }}."
