@@ -13,18 +13,15 @@ const mockOutput: Omit<Message, "id" | "createdAt">[] = [
     message: "test-message-2",
   },
 ];
+jest.setTimeout(60000);
 
 beforeAll(async () => {
-  jest.setTimeout(60000);
-
   await prisma.message.createMany({
     data: mockOutput,
   });
 });
 
 afterAll(async () => {
-  jest.setTimeout(60000);
-
   await prisma.message.deleteMany({
     where: {
       message: {
