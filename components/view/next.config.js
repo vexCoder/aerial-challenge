@@ -14,7 +14,8 @@ const nextConfig = {
         hostname: 'aerial-challenge.s3.ap-northeast-1.amazonaws.com',
       }
     ]
-  }
+  },
+  distDir: 'build',
 };
 
 module.exports = nextConfig;
