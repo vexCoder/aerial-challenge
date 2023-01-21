@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: yarn --frozen-lockfile
       - name: Build
-        run: yarn workspace core build && yarn workspace server build
+        run: yarn workspace core build && yarn workspace server generate && yarn workspace server build
       - name: Run tests
         run: yarn workspace server test
         env:
