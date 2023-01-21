@@ -5,7 +5,8 @@
   "description": "<%= description %>",
   "scripts": {
     "server": "turbo run dev --filter=server --filter=core",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "start": "turbo run start"
   },
   "keywords": [],
   "author": "<%= author %> <<%= email %>>",

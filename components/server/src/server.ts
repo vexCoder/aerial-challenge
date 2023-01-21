@@ -11,7 +11,7 @@ import type { Context } from "./trpc";
 
 dotenv.config();
 
-export const createInnerTRPCContext = (opts: Context) => ({
+export const createInnerTRPCContext = (opts: Partial<Context>) => ({
   prisma: opts.prisma || prisma,
 });
 
@@ -27,3 +27,4 @@ export const appRouter = router({
 });
 
 export type AppRouter = typeof appRouter;
+export type PrismaClient = typeof prisma;

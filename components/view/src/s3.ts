@@ -1,4 +1,8 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  DeleteObjectCommand,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import fs from "fs";
 
 const client = new S3Client({
@@ -17,9 +21,17 @@ export const uploadImage = async (key: string, body: fs.ReadStream) => {
       Bucket: "aerial-challenge",
       Key: key,
       Body: body,
-      ACL: "public-read",
     })
   );
 
   return `https://${process.env.AWS_S3_HOST}/${key}`;
+};
+
+export const deleteImage = async (key: string) => {
+  await client.send(
+    new DeleteObjectCommand({
+      Bucket: "aerial-challenge",
+      Key: key,
+    })
+  );
 };

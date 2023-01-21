@@ -1,8 +1,17 @@
 {
   "pipeline": {
-    "build": {},
+    "build": {
+      "dependsOn": [
+        "generate"
+      ]
+    },
+    "generate": {},
     "dev": {},
     "lint": {},
-    "prod": {}
+    "start": {
+      "dependsOn": [
+        "build"
+      ]
+    }
   }
 }

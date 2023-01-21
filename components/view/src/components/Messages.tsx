@@ -9,7 +9,7 @@ const useStyles = createStyles((theme) => ({
   root: {
     background: theme.colors.gray[2],
     maxHeight: "50vh",
-    height: "100%",
+    minHeight: "50vh",
     overflowY: "auto",
     flexDirection: "column-reverse",
   },
@@ -103,7 +103,7 @@ const Section = memo(({ limit, page, scroll, next }: SectionProps) => {
       {messages
         .sort((a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix())
         .map((message) => {
-          return <Message key={message.id} item={message} />;
+          return <Message key={message.id} item={message} page={page} />;
         })}
     </Stack>
   );

@@ -1,7 +1,13 @@
 import { Message as MessageType } from "core";
 import dayjs from "dayjs";
 import Image from "next/image";
-import { Flex, createStyles, Text } from "@mantine/core";
+import { IconTrash } from "@tabler/icons";
+import { Flex, createStyles, Text, ActionIcon } from "@mantine/core";
+import { useHover } from "@mantine/hooks";
+import { useCallback } from "react";
+import { useMutation } from "@tanstack/react-query";
+import ky from "ky";
+import { trpc } from "../trpc";
 
 const useStyles = createStyles((theme) => ({
   box: {
@@ -27,38 +33,113 @@ const useStyles = createStyles((theme) => ({
     padding: theme.spacing.sm,
     width: "max-content",
     maxWidth: 350,
+    textOverflow: "ellipsis",
+    overflow: "hidden",
   },
   timestamp: {
     color: theme.colors.gray[6],
+  },
+  trash: {
+    visibility: "hidden",
+    transition: "all 0.2s ease",
+    transform: "scale(0.75)",
+    opacity: 0,
+    "&.open": {
+      visibility: "visible",
+      opacity: 1,
+      transform: "scale(1)",
+    },
   },
 }));
 
 type Props = {
   item: Omit<MessageType, "createdAt"> & { createdAt: string; image?: string };
+  page: number;
 };
+interface DeleteOpts {
+  id: string;
+}
 
-const Message = ({ item }: Props) => {
-  const { classes } = useStyles();
+const Message = ({ item, page }: Props) => {
+  const { classes, cx } = useStyles();
+  const { hovered, ref } = useHover();
+  const ctx = trpc.useContext();
+  const deleteMessage = trpc.delete.useMutation();
+
+  const deleteFile = useMutation({
+    mutationFn: (opts: DeleteOpts) => {
+      return ky.post("/api/delete", {
+        json: {
+          id: opts.id,
+        },
+      });
+    },
+  });
 
   const url = item.id === "temp" && item.image ? item.image : item.url;
 
+  const handleDelete = useCallback(async () => {
+    ctx.list.setData(
+      {
+        page,
+        limit: 3,
+      },
+      (prev) => {
+        const prevMessags = prev?.messages ?? [];
+        const messages = prevMessags.filter((m) => m.id !== item.id);
+        return {
+          messages,
+          hasNext: prev?.hasNext ?? false,
+        };
+      }
+    );
+
+    const res = await deleteMessage.mutateAsync({
+      id: item.id,
+    });
+
+    const id = res?.id;
+
+    if (item.hasImage && id) {
+      await deleteFile.mutateAsync({
+        id,
+      });
+    }
+
+    await ctx.invalidate(undefined, {
+      queryKey: ["list"],
+    });
+  }, [deleteMessage, ctx, page, item, deleteFile]);
+
   return (
-    <div data-testid="scroll-test-item" className={classes.box}>
-      <Flex className={classes.message} direction="column">
-        <Text className={classes.text} size="md">
-          {item.message}
-        </Text>
-        {item.hasImage && url && (
-          <div className={classes.image}>
-            <Image
-              src={url}
-              alt="test"
-              style={{ objectFit: "cover" }}
-              fill
-              sizes="125px"
-            />
-          </div>
-        )}
+    <div ref={ref} className={classes.box}>
+      <Flex align="center" justify="space-between" gap="sm">
+        <Flex className={classes.message} direction="column">
+          <Text className={classes.text} size="md">
+            {item.message}
+          </Text>
+          {item.hasImage && url && (
+            <div className={classes.image}>
+              <Image
+                src={url}
+                alt="test"
+                style={{ objectFit: "cover" }}
+                fill
+                sizes="125px"
+              />
+            </div>
+          )}
+        </Flex>
+        <ActionIcon
+          variant="filled"
+          color="red"
+          size="md"
+          className={cx(classes.trash, hovered && "open")}
+          disabled={item.id === "temp" && deleteMessage.isLoading}
+          onClick={handleDelete}
+        >
+          <IconTrash size={16} />
+        </ActionIcon>
       </Flex>
       <Text className={classes.timestamp} size="xs">
         {dayjs(item.createdAt).fromNow()}

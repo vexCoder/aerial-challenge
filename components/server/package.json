@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc -w --project tsconfig.build.json",
     "build": "tsc --project tsconfig.build.json",
-    "prisma": "prisma",
+    "generate": "prisma generate",
     "test": "jest"
   },
   "files": [
