@@ -1,9 +1,30 @@
 name: Aerial Test Challenge
 run-name: Checking if list is working
-on: [push]
+on: 
+  push:
+    branches:
+      - 'master'
 jobs:
-  Explore-GitHub-Actions:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - run: yarn workspace server test
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Install git
+        run: |
+          sudo apt-get update 
+          sudo apt-get install -y git
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+      - name: Run tests
+        run: yarn workspace server test
+      - name: Upload coverage
+        uses: caffco/code-climate-github-action@v0.0.1-alpha.5
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          repository_root_path: ${{github.workspace}}
+          collect_coverage: 'true'
+          coverage_file_patterns: |
+            coverage/lcov.info:lcov
