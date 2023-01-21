@@ -1,0 +1,15 @@
+{
+  "extends": "ts-config/tsconfig.next.json",
+  "compilerOptions": {
+    "strict": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "pages/**/*.tsx",
+    "pages/**/*.ts",
+    "node_modules/server/dist/server.d.ts"
+  ],
+  "exclude": []
+}

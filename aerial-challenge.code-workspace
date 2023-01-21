@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "W:/Sample Projects/clean-architecture-demo-main"
+		},
+		{
+			"path": "W:/Sample Projects/clean-react-master"
+		},
+		{
+			"path": "W:/Sample Projects/typescript-clean-architecture-master"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "node_modules\\typescript\\lib"
+	}
+}

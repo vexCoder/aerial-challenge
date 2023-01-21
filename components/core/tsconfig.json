@@ -1,9 +1,11 @@
 {
     "extends": "ts-config/tsconfig.node.json",
     "compilerOptions": {
-      "baseUrl": ".",
       "esModuleInterop": true,
       "resolveJsonModule": true,
+      "outDir": "dist",
+      "module": "CommonJS",
+      "moduleResolution": "node"
     },
     "include": ["src/**/*.ts"],
     "exclude": []

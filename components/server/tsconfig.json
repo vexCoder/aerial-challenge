@@ -1,0 +1,16 @@
+{
+    "extends": "ts-config/tsconfig.node.json",
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "module": "ES6",
+      "target": "ES6",
+      "moduleResolution": "node",
+      "isolatedModules": false,
+      "allowSyntheticDefaultImports": true,
+      "outDir": "dist",
+    },
+    "include": ["src/**/*.ts", "prisma/**/*.ts", "src/env.d.ts"],
+    "exclude": []
+  }
+  

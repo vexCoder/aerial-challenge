@@ -10,7 +10,8 @@
     "rules": {
       "no-console": "off",
       "no-plusplus": "off",
-      "class-methods-use-this": "off"
+      "class-methods-use-this": "off",
+      "no-underscore-dangle": "off"
     },
     "settings": {
       "import/resolver": {

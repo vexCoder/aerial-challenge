@@ -4,10 +4,8 @@
   "private": true,
   "description": "<%= description %>",
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
+    "server": "turbo run dev --filter=server --filter=core",
+    "build": "turbo run build"
   },
   "keywords": [],
   "author": "<%= author %> <<%= email %>>",
