@@ -1,0 +1,9 @@
+name: Aerial Test Challenge
+run-name: Checking if list is working
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: yarn test
+      - run: echo "🍏 This job's status is ${{ job.status }}."
