@@ -21,9 +21,13 @@ beforeAll(async () => {
   await prisma.message.createMany({
     data: mockOutput,
   });
+
+  await prisma.$disconnect();
 });
 
 afterAll(async () => {
+  await prisma.$connect();
+
   await prisma.message.deleteMany({
     where: {
       message: {
