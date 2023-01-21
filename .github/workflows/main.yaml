@@ -17,6 +17,8 @@ jobs:
           fetch-depth: 0
       - name: Install dependencies
         run: yarn --frozen-lockfile
+      - name: Build
+        run: yarn workspace core build && yarn workspace server build
       - name: Run tests
         run: yarn workspace server test
       - name: Upload coverage
