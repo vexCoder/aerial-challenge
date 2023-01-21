@@ -17,20 +17,9 @@ const mockOutput: Omit<Message, "id" | "createdAt">[] = [
 beforeAll(async () => {
   jest.setTimeout(60000);
 
-  await prisma.$connect();
-
   await prisma.message.createMany({
     data: mockOutput,
   });
-});
-
-test("list test", async () => {
-  const caller = appRouter.createCaller(createInnerTRPCContext({ prisma }));
-
-  const result = await caller.list({ page: 1, limit: 1 });
-
-  expect(result.messages).toHaveLength(1);
-  expect(result.hasNext).toBe(true);
 });
 
 afterAll(async () => {
@@ -45,4 +34,13 @@ afterAll(async () => {
   });
 
   await prisma.$disconnect();
+});
+
+test("list test", async () => {
+  const caller = appRouter.createCaller(createInnerTRPCContext({ prisma }));
+
+  const result = await caller.list({ page: 1, limit: 1 });
+
+  expect(result.messages).toHaveLength(1);
+  expect(result.hasNext).toBe(true);
 });
